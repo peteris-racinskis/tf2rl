@@ -68,7 +68,7 @@ class IRLTrainer(Trainer):
         self._expert_next_obs = expert_next_obs
         self._expert_act = expert_act
         # Minus one to get next obs
-        self._random_range = range(expert_obs.shape[0])
+        self._random_range = expert_obs.shape[0]
 
     def __call__(self):
         """

@@ -10,7 +10,7 @@ install_requires = [
     "scipy",
     "scikit-image"]
 
-tf_version = "2.4"  # Default Version
+tf_version = "2.8"  # Default Version
 try:
     import tensorflow as tf
 
@@ -19,12 +19,14 @@ except ImportError:
     install_requires.append(f"tensorflow=={tf_version}")
     pass
 
-compatible_tfp = {"2.4": ["tensorflow-probability~=0.12.0"],
+compatible_tfp = {"2.8": ["tensorflow-probability~=0.16.0"],
+                  "2.4": ["tensorflow-probability~=0.12.0"],
                   "2.3": ["tensorflow-probability~=0.11.0"],
                   "2.2": ["tensorflow-probability~=0.10.0"],
                   "2.1": ["tensorflow-probability~=0.8.0"],
                   "2.0": ["tensorflow-probability~=0.8.0"]}
 compatible_tfa = {"2.4": ["tensorflow_addons~=0.13.0"],
+                  "2.8": ["tensorflow_addons~=0.16.0"],
                   "2.3": ["tensorflow_addons~=0.13.0"],
                   "2.2": ["tensorflow_addons==0.11.2"],
                   "2.1": ["tensorflow_addons~=0.9.1"],
