@@ -1,6 +1,7 @@
 import os
 
 import numpy as np
+import pandas as pd
 import joblib
 import matplotlib.pyplot as plt
 from matplotlib import animation
@@ -15,6 +16,17 @@ def restore_latest_n_traj(dirname, n_path=10, max_steps=None):
     filenames = get_filenames(dirname, n_path)
     return load_trajectories(filenames, max_steps)
 
+# Load my own dataset and coerce it into a format that this repo will understand
+def load_csv_dataset(filename, len_obs=11, len_act=8, len_nex=11, duplicate=True):
+    values = pd.read_csv(filename).values.astype(np.float32)
+    data = {}
+    data["obses"] = values[:,:len_obs]
+    data["acts"] = values[:,len_obs:len_obs+len_act]
+    if duplicate:
+        data["next_obses"] = data["obses"]
+    else:
+        data["next_obses"] = values[:,len_obs+len_act:]
+    return data
 
 def get_filenames(dirname, n_path=None):
     import re
