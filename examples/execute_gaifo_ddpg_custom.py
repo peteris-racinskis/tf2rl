@@ -1,5 +1,5 @@
 import os
-from re import S
+import random
 
 from tf2rl.algos.ddpg import DDPG
 from tf2rl.algos.gaifo import GAIfO
@@ -7,11 +7,39 @@ from tf2rl.envs.dummy_env import DummyEnv
 from tf2rl.experiments.custom_trainer import CustomTrainer
 from tf2rl.experiments.utils import load_csv_dataset
 import tensorflow as tf
-
+import pandas as pd
+import numpy as np
 
 FILENAME="/home/user/repos/masters/processed_data/train_datasets/train-003430811ff20c35ccd5.csv"
+OUTPUT="results/generated/generated.csv"
 cdir = os.path.dirname("results/20220408T111648.999757_DDPG_GAIfO/ckpt-10")
 latest = tf.train.latest_checkpoint(cdir)
+
+
+def collect_episode(initial: np.ndarray, policy: DDPG, env: DummyEnv):
+    obses = []
+    obs = env.reset(initial)
+    done = False
+    while not done:
+        obses.append(obs)
+        action = policy.get_action(obs)
+        obs, _, done, __ = env.step(action)
+    return np.stack(obses)
+
+def get_initial_states(train_set):
+    all_states = train_set["obses"]
+    selection = random.sample(range(len(all_states)), 50)
+    return all_states[selection]
+
+def generate_trajectories(initial_states, model, env):
+    trajectories = []
+    for init in initial_states:
+        ep = collect_episode(init, model, env)
+        trajectories.append(ep)
+    data = np.concatenate(trajectories)
+    df = pd.DataFrame(data=data, columns=["x", "y", "z", "rx", "ry", "rz", "rw", "rel", "tx", "ty", "tz"])
+    return df
+
 
 
 if __name__ == "__main__":
@@ -36,15 +64,8 @@ if __name__ == "__main__":
         critic_units=units,
         n_warmup=1000,
         batch_size=100)
-    irl = GAIfO(
-        state_shape=env.observation_space.shape,
-        units=units,
-        enable_sn=args.enable_sn,
-        batch_size=32,
-        gpu=args.gpu)
 
     expert_trajs = load_csv_dataset(FILENAME)
-    initial_states = expert_trajs["obses"]
     # YOU DUMB FUCK, THE DDPG CLASS IS NOT INHERITING FROM MDOEL
     # COMPOSITION not INHERITANCE
     # In this case, it has two models - actor and critic
@@ -53,6 +74,8 @@ if __name__ == "__main__":
     # time.
     checkpoint = tf.train.Checkpoint(actor=policy.actor, critic=policy.critic)
     checkpoint.restore(latest)
-    x = env.reset(initial_states)
-    policy.get_action(env.observation_space.sample())
-    pass
+
+
+    initial_states = get_initial_states(expert_trajs)
+    df = generate_trajectories(initial_states, policy, env)
+    df.to_csv(OUTPUT)

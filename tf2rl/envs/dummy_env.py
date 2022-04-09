@@ -26,7 +26,7 @@ class DummyEnv(gym.Env):
         assert initial_state.shape[-1:] == self.shape
         self._episode = 0
         self.initial = initial_state # 
-        self.target_coords = initial_state[0,-target:]
+        self.target_coords = initial_state.flatten()[-target:]
         return initial_state
 
 
