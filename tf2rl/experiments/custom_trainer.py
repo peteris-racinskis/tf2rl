@@ -39,7 +39,7 @@ class CustomTrainer(IRLTrainer):
 
         while total_steps < self._max_steps:
             if total_steps < self._policy.n_warmup:
-                action = self._env.action_space.sample()
+                action = self._initial_states[total_steps]
             else:
                 action = self._policy.get_action(obs)
 

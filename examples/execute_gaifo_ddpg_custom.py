@@ -11,8 +11,9 @@ import pandas as pd
 import numpy as np
 
 FILENAME="/home/user/repos/masters/processed_data/train_datasets/train-003430811ff20c35ccd5.csv"
-OUTPUT="results/generated/generated.csv"
-cdir = os.path.dirname("results/20220408T111648.999757_DDPG_GAIfO/ckpt-10")
+OUTPUT="results/generated/generated-100k.csv"
+cdir = os.path.dirname("results/20220409T123851.835836_DDPG_GAIfO")
+#cdir = "/home/user/repos/tf2rl/results/20220409T132003.050239_DDPG_GAIfO"
 latest = tf.train.latest_checkpoint(cdir)
 
 

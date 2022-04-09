@@ -11,7 +11,7 @@ if __name__ == '__main__':
     parser = CustomTrainer.get_argument()
     parser = GAIfO.get_argument(parser)
     parser.add_argument('--env-name', type=str, default="DummyEnv")
-    parser.add_argument('--max-steps', type=str, default=20000)
+    parser.add_argument('--max-steps', type=str, default=1000000)
     args = parser.parse_args()
 
     units = [400, 300]
