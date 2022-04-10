@@ -11,9 +11,12 @@ import pandas as pd
 import numpy as np
 
 FILENAME="/home/user/repos/masters/processed_data/train_datasets/train-003430811ff20c35ccd5.csv"
-OUTPUT="results/generated/generated-100k.csv"
+# For using normalized trajectories:
+FILENAME="/home/user/repos/masters/processed_data/train_datasets/train-start-c088196696e9f167c879.csv"
+OUTPUT="results/generated/generated-norm-100k.csv"
 cdir = os.path.dirname("results/20220409T123851.835836_DDPG_GAIfO")
-#cdir = "/home/user/repos/tf2rl/results/20220409T132003.050239_DDPG_GAIfO"
+cdir = "/home/user/repos/tf2rl/results/20220409T132003.050239_DDPG_GAIfO"
+cdir = "results/20220410T130707.641400_DDPG_GAIfO"
 latest = tf.train.latest_checkpoint(cdir)
 
 

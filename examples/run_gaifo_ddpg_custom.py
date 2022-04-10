@@ -5,13 +5,14 @@ from tf2rl.experiments.utils import load_csv_dataset
 from tf2rl.envs.dummy_env import DummyEnv
 
 FILENAME="/home/user/repos/masters/processed_data/train_datasets/train-003430811ff20c35ccd5.csv"
+FILENAME="/home/user/repos/masters/processed_data/train_datasets/train-start-c088196696e9f167c879.csv"
 
 
 if __name__ == '__main__':
     parser = CustomTrainer.get_argument()
     parser = GAIfO.get_argument(parser)
     parser.add_argument('--env-name', type=str, default="DummyEnv")
-    parser.add_argument('--max-steps', type=str, default=1000000)
+    parser.add_argument('--max-steps', type=str, default=100000)
     args = parser.parse_args()
 
     units = [400, 300]
